@@ -5,11 +5,12 @@ import time
 
 last_time = time.time()
 while(True):
+    # 800x600 ventana de revision
     screen =  np.array(ImageGrab.grab(bbox=(0,40,800,640)))
-    # 800x600 windowed mode
     #printscreen =  np.array(ImageGrab.grab(bbox=(0,40,800,640)))
     print('Loop took {} seconds'.format(time.time()-last_time))
     last_time = time.time()
+    #corrreccion de colores y ventana
     cv2.imshow('window',cv2.cvtColor(screen, cv2.COLOR_BGR2RGB))
     if cv2.waitKey(25) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
