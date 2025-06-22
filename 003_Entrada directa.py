@@ -2,7 +2,7 @@ import numpy as np
 from PIL import ImageGrab
 import cv2
 import time
-import pyautogui
+from directkeys import PressKey, W, A, S, D
 
 # gives us time to get situated in the game
 for i in list(range(4))[::-1]:
@@ -10,10 +10,10 @@ for i in list(range(4))[::-1]:
     time.sleep(1)
 
 print('down')
-pyautogui.keyDown('w') 
+PressKey(W) 
 time.sleep(3)
 print('up')
-pyautogui.keyUp('w') 
+PressKey(W) 
 
 #Imagen procesada con Canny para simplificar bordes
 def process_img(original_image):
