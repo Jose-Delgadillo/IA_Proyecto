@@ -8,13 +8,17 @@ from directkeys import PressKey, W, A, S, D
 from statistics import mean
 
 def roi(img, vertices):
+    
     #blank mask:
-    mask = np.zeros_like(img)
-    # fill the mask
+    mask = np.zeros_like(img)   
+    
+    #filling pixels inside the polygon defined by "vertices" with the fill color    
     cv2.fillPoly(mask, vertices, 255)
-    # now only show the area that is the mask
+    
+    #returning the image only where mask pixels are nonzero
     masked = cv2.bitwise_and(img, mask)
     return masked
+
 
 def draw_lanes(img, lines, color=[0, 255, 255], thickness=3):
 
@@ -105,12 +109,6 @@ def draw_lanes(img, lines, color=[0, 255, 255], thickness=3):
         print(str(e))
 
 
-# def draw_lines(img,lines):
-#     for line in lines:
-#         coords = line[0]
-#         cv2.line(img, (coords[0], coords[1]), (coords[2], coords[3]), [255,255,255], 3)
-
-
 def process_img(image):
     original_image = image
     # convert to gray
@@ -146,29 +144,24 @@ def process_img(image):
                 print(str(e))
     except Exception as e:
         pass
-    # Asegura que lines no sea None
-    lines = cv2.HoughLinesP(processed_img, 1, np.pi/180, 180, 20, 15)
-    if lines is not None:
-        draw_lanes(processed_img, lines)
 
-    return processed_img
-
+    return processed_img,original_image
 
 
 
 def main():
-    print("Iniciando bucle...")
     last_time = time.time()
-    while(True):
-        print("Capturando imagen...")
+    while True:
         screen =  np.array(ImageGrab.grab(bbox=(0,40,1024,805)))
-        new_screen = process_img(screen)
-        print('Loop took {} seconds'.format(time.time()-last_time))
+        print('Frame took {} seconds'.format(time.time()-last_time))
         last_time = time.time()
+        new_screen,original_image = process_img(screen)
         cv2.imshow('window', new_screen)
-        #cv2.imshow('window2', cv2.cvtColor(screen, cv2.COLOR_BGR2RGB))
+        cv2.imshow('window2',cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB))
+        #cv2.imshow('window',cv2.cvtColor(screen, cv2.COLOR_BGR2RGB))
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
+
 if __name__ == "__main__":
     main()
